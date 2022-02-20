@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  web:
+    container_name: "network_client_1_web"
+    build:
+      context: .
+      dockerfile: "./provision/ubuntu/Dockerfile.ubuntu"
+    working_dir: /var/www/app
+    restart: unless-stopped
+    ports:
+      - 80:80
+      # - 443:443
+    volumes:
+      - ./code:/var/www/app
+      - ./provision/nginx/sites-enabled:/etc/nginx/sites-enabled
+    networks:
+      - network_front_end_1
+    logging:
+          driver: "json-file"
+          options:
+            max-size: "2000k"
+            max-file: "1"
+networks:
+  network_front_end_1:
+      driver: bridge
+      name: network_front_end_1
